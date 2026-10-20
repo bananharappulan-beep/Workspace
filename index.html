@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Magnus Workspace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+
+<header class="top">
+  <div class="wrap">
+    <div class="mark" aria-hidden="true">M</div>
+    <span class="brand">Magnus Workspace</span>
+    <span class="tag">Company Workspace</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Magnus Institute of Technologies</h1>
+    <p>Every company, department, project and link in one place. Pick a company, then a department, and everything stays in one table.</p>
+  </section>
+
+  <section aria-labelledby="folders-h">
+    <div class="sec-head top-head">
+      <div>
+        <h2 id="folders-h">Folders</h2>
+        <div class="fcount" id="folderCount"></div>
+      </div>
+      <input class="search" id="search" type="search" placeholder="Search all links" aria-label="Search all links" autocomplete="off">
+    </div>
+    <div id="storageWarn"></div>
+    <nav class="crumbs" id="crumbs" aria-label="Folder path" hidden></nav>
+    <form class="newfolder" id="newFolderForm" novalidate>
+      <input id="newFolderName" type="text" maxlength="60" placeholder="New folder name (e.g. Merchx)" aria-label="New folder name" autocomplete="off">
+      <button class="btn primary" type="submit" id="newFolderBtn">Create folder</button>
+    </form>
+    <div class="cards" id="cards"></div>
+    <div id="panel"></div>
+    <div class="row xfer">
+      <button class="btn" type="button" data-act="export-json" id="btnExport">Export my folders</button>
+      <button class="btn" type="button" data-act="export-csv" id="btnExportCsv">Export CSV</button>
+      <button class="btn" type="button" data-act="import" id="btnImport">Import</button>
+      <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv" hidden>
+    </div>
+    <p class="note">Personal folders and links are private and stored only in this device and browser. Use Export and Import to move them to another device. Import also reads the portfolio.csv made by scan_projects.py.</p>
+  </section>
+
+  <section aria-labelledby="proj-h" id="projSec">
+    <div class="sec-head">
+      <h2 id="proj-h">Links and projects</h2>
+      <div class="row" id="folderTools"></div>
+    </div>
+    <div id="exampleNote"></div>
+    <div class="tools">
+      <div class="row">
+        <button class="btn" type="button" data-act="new-link" id="btnNewLink">Add link</button>
+        <button class="btn primary" type="button" data-act="new-project" id="btnNewProject">Add project</button>
+      </div>
+    </div>
+    <div id="linkbox"></div>
+    <div class="tablebox" id="tablebox"></div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</main>
+<div id="toast-slot"></div>
+
+<script src="links.js"></script>
+<script src="app.js"></script>
+
+</body></html>
