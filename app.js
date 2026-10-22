@@ -20,15 +20,7 @@
   function $(id) { return document.getElementById(id); }
 
   function seed() {
-    var f1 = uid(), f2 = uid();
-    return {
-      folders: [{ id: f1, name: "Work projects" }, { id: f2, name: "Learning" }],
-      projects: [
-        { id: uid(), folderId: f1, name: "branch-dashboard", desc: "Daily branch sales and lead conversion view", stack: ["Python", "Pandas"], status: "Active", link: "C:\\Projects\\branch-dashboard", updated: today(), example: true },
-        { id: uid(), folderId: f1, name: "attendance-report", desc: "Daily attendance report with PDF export", stack: ["JavaScript", "HTML"], status: "Shipped", link: "https://github.com/your-name/attendance-report", updated: today(), example: true },
-        { id: uid(), folderId: f2, name: "sql-practice", desc: "Practice queries and notes", stack: ["SQL"], status: "Paused", link: "C:\\Projects\\sql-practice", updated: today(), example: true }
-      ]
-    };
+    return { folders: [], projects: [] };
   }
   function load() {
     try {
@@ -135,9 +127,10 @@
     state.structureV7 = true;
   }
   /* Links listed in links.js: folders are created from the path, each entry is added once. */
-  (function syncConfigLinks() {
+  function syncConfigLinks(force) {
+    var added = 0;
     var list = window.WORKSPACE_LINKS || [];
-    if (!state.seededLinks) state.seededLinks = {};
+    if (!state.seededLinks || force) state.seededLinks = {};
     list.forEach(function (it) {
       var parts = String(it.folder || "").split("/").map(function (t) { return t.trim(); }).filter(Boolean);
       if (!parts.length || !it.name || !it.url) return;
@@ -150,10 +143,35 @@
         parent = f.id;
       });
       var exists = state.projects.some(function (p) { return p.folderId === parent && String(p.name).toLowerCase() === String(it.name).toLowerCase(); });
-      if (!exists) state.projects.push({ id: uid(), folderId: parent, name: String(it.name), desc: "", stack: [], status: "Link", link: String(it.url), updated: today() });
+      if (!exists) { state.projects.push({ id: uid(), folderId: parent, name: String(it.name), desc: "", stack: [], status: "Link", link: String(it.url), updated: today() }); added++; }
       state.seededLinks[key] = true;
     });
-  })();
+    return added;
+  }
+  syncConfigLinks(false);
+  /* One-time repair: every business has its own Attendance Monitor in its Operation(s) folder. */
+  if (!state.structureV8) {
+    COMPANIES.forEach(function (cn) {
+      var co8 = findFolder(cn, null);
+      if (!co8) return;
+      var op8 = findFolder("Operation", co8.id) || findFolder("Operations", co8.id);
+      if (!op8) { op8 = { id: uid(), name: "Operation", parentId: co8.id }; state.folders.push(op8); }
+      var has8 = state.projects.some(function (p) { return p.folderId === op8.id && p.name === "Attendance Monitor"; });
+      if (!has8) state.projects.push({ id: uid(), folderId: op8.id, name: "Attendance Monitor", desc: "", stack: [], status: "Link", link: "https://attendance-monitor-4i3c.onrender.com/", updated: today() });
+    });
+    state.structureV8 = true;
+  }
+  /* One-time: remove the two starter folders (and the example rows inside them). */
+  if (!state.structureV9) {
+    ["Work projects", "Learning"].forEach(function (n) {
+      var f9 = findFolder(n, null);
+      if (!f9) return;
+      var ids9 = idsUnder(f9.id);
+      state.folders = state.folders.filter(function (f) { return ids9.indexOf(f.id) === -1; });
+      state.projects = state.projects.filter(function (p) { return ids9.indexOf(p.folderId) === -1; });
+    });
+    state.structureV9 = true;
+  }
   function nameHtml(p) {
     if (p.status === "Link" && /^https?:\/\//i.test(p.link)) return '<a href="' + esc(p.link) + '" target="_blank" rel="noopener noreferrer">' + esc(p.name) + "</a>";
     return esc(p.name);
@@ -343,7 +361,7 @@
     var box = $("linkbox");
     if (!links.length) { box.innerHTML = ""; return; }
     var showFolder = !!ui.q.trim();
-    var h = '<div class="sublabel">Links</div><div class="lgrid">';
+    var h = '<div class="sublabel">' + (ui.q.trim() ? "Search results from all folders" : "Links") + '</div><div class="lgrid">';
     links.forEach(function (p) {
       var web = /^https?:\/\//i.test(p.link || "");
       var armed = ui.confirm === "proj:" + p.id;
@@ -586,6 +604,7 @@
       case "export-csv":
         var csv = toCsv(); saveFile("vscode-workspace.csv", csv, csv); break;
       case "import": $("importFile").click(); break;
+      case "restore-links": { var n = syncConfigLinks(true); commit(); toast(n ? "Restored " + n + " missing link" + (n === 1 ? "." : "s.") : "All default links are already there."); break; }
       case "copy-loc": copyText(b.getAttribute("data-val"), "Link copied."); break;
       case "copy-export": var bx = $("exportBox"); copyText(bx ? bx.value : "", "Copied."); if (bx) bx.select(); break;
     }

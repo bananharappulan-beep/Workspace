@@ -36,30 +36,34 @@
     </form>
     <div class="cards" id="cards"></div>
     <div id="panel"></div>
-    <div class="row xfer">
-      <button class="btn" type="button" data-act="export-json" id="btnExport">Export my folders</button>
-      <button class="btn" type="button" data-act="export-csv" id="btnExportCsv">Export CSV</button>
-      <button class="btn" type="button" data-act="import" id="btnImport">Import</button>
-      <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv" hidden>
-    </div>
-    <p class="note">Personal folders and links are private and stored only in this device and browser. Use Export and Import to move them to another device. Import also reads the portfolio.csv made by scan_projects.py.</p>
   </section>
 
   <section aria-labelledby="proj-h" id="projSec">
+    <div id="linkbox"></div>
+    <div class="tablebox" id="tablebox"></div>
     <div class="sec-head">
       <h2 id="proj-h">Links and projects</h2>
       <div class="row" id="folderTools"></div>
     </div>
-    <div id="exampleNote"></div>
     <div class="tools">
       <div class="row">
         <button class="btn" type="button" data-act="new-link" id="btnNewLink">Add link</button>
         <button class="btn primary" type="button" data-act="new-project" id="btnNewProject">Add project</button>
       </div>
     </div>
-    <div id="linkbox"></div>
-    <div class="tablebox" id="tablebox"></div>
   </section>
+
+  <div class="bottom-notes">
+      <div class="row xfer">
+        <button class="btn" type="button" data-act="export-json" id="btnExport">Export my folders</button>
+        <button class="btn" type="button" data-act="export-csv" id="btnExportCsv">Export CSV</button>
+        <button class="btn" type="button" data-act="import" id="btnImport">Import</button>
+        <button class="btn" type="button" data-act="restore-links" id="btnRestore">Restore default links</button>
+        <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv" hidden>
+      </div>
+  <div id="exampleNote"></div>
+  <p class="note">Personal folders and links are private and stored only in this device and browser. Use Export and Import to move them to another device. Import also reads the portfolio.csv made by scan_projects.py.</p>
+  </div>
 
   <p class="foot" id="foot"></p>
 </main>

@@ -301,3 +301,9 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--a
 .crumb { border-radius: 999px; padding: 3px 10px; }
 .alert { border-radius: 12px; }
 @media (prefers-reduced-motion: reduce) { .btn, .fcard, .lcard { transition: none; } .btn:hover, .fcard:hover, .lcard:hover { transform: none; } }
+
+.bottom-notes { margin-top: 28px; }
+.bottom-notes .note { margin: 12px 0 0; }
+.bottom-notes .xfer { margin: 0; }
+#projSec .sec-head { margin-top: 22px; }
+#projSec .tools { margin-bottom: 8px; }
